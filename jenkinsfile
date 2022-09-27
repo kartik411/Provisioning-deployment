@@ -13,7 +13,7 @@ pipeline {
       steps {
         sh 'cd test-nodeapp-1-task && sudo docker build . -t public.ecr.aws/s8b3a9g8/node-app:latest'
         sh 'aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/s8b3a9g8'
-        withDockerRegistry(credentialsId: 'ecr:us-east-1:nodeApp', url: 'public.ecr.aws/s8b3a9g8/node-app') {
+        withDockerRegistry(credentialsId: 'ecr:us-east-1:nodeApp', url: 'https://public.ecr.aws/s8b3a9g8/node-app') {
         sh 'sudo docker push public.ecr.aws/s8b3a9g8/node-app:latest'
         }
       }  
