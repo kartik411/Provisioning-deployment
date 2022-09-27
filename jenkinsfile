@@ -19,8 +19,11 @@ REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/
       steps {
         sh 'sudo aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 647560355561.dkr.ecr.us-east-1.amazonaws.com'
         sh 'cd test-nodeapp-1-task && sudo docker build . -t 647560355561.dkr.ecr.us-east-1.amazonaws.com/node-app:${BUILD_NUMBER}'
-        sh 'sudo docker push 647560355561.dkr.ecr.us-east-1.amazonaws.com/node-app:${BUILD_NUMBER}'
+        withCredentials([<object of type com.cloudbees.jenkins.plugins.awscredentials.AmazonWebServicesCredentialsBinding>]) {
+          sh 'sudo docker push 647560355561.dkr.ecr.us-east-1.amazonaws.com/node-app:${BUILD_NUMBER}'
+        }
       }
+        
     }
     stage('Deploy to app host') {
       steps {
