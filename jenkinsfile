@@ -10,7 +10,7 @@ pipeline {
     }
     stage('Build Docker Image') {
       steps {
-        sh '\$(aws ecr get-login --no-include-email --region us-east-1)'
+        sh 'aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/s8b3a9g8'
         sh 'cd test-nodeapp-1-task && sudo docker build . -t public.ecr.aws/s8b3a9g8/node-app:${BUILD_NUMBER}'
         sh 'sudo docker push public.ecr.aws/s8b3a9g8/node-app:${BUILD_NUMBER}'
       }
