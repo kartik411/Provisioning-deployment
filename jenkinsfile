@@ -12,7 +12,9 @@ pipeline {
     stage('Build Docker Image') {
       steps {
         sh 'cd test-nodeapp-1-task && sudo docker build . -t 647560355561.dkr.ecr.us-east-1.amazonaws.com/node-app:hello'
-        sh 'sudo docker push 647560355561.dkr.ecr.us-east-1.amazonaws.com/node-app:hello'
+        withDockerRegistry(credentialsId: 'ecr:us-east-1:nodeApp', url: '647560355561.dkr.ecr.us-east-1.amazonaws.com/node-app') {
+          sh 'sudo docker push 647560355561.dkr.ecr.us-east-1.amazonaws.com/node-app:hello'
+        }  
       }
     }
     stage('Deploy to app host') {
