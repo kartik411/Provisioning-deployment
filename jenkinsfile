@@ -1,6 +1,13 @@
 pipeline {
   agent {
     label 'app-instance'
+    environment {
+AWS_ACCOUNT_ID="647560355561"
+AWS_DEFAULT_REGION="us-east-1"
+IMAGE_REPO_NAME="node-app"
+IMAGE_TAG="${BUILD_NUMBER)"
+REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}"
+    }
   }
   stages {
     stage('git Checkout') {
@@ -10,14 +17,14 @@ pipeline {
     }
     stage('Build Docker Image') {
       steps {
-        sh 'cd test-nodeapp-1-task && sudo docker build . -t public.ecr.aws/s8b3a9g8/node-app:${BUILD_NUMBER}'
-        sh 'sudo aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/s8b3a9g8'
-        sh 'sudo docker push public.ecr.aws/s8b3a9g8/node-app:${BUILD_NUMBER}'
+        sh 'sudo aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 647560355561.dkr.ecr.us-east-1.amazonaws.com'
+        sh 'cd test-nodeapp-1-task && sudo docker build . -t 647560355561.dkr.ecr.us-east-1.amazonaws.com/node-app:${BUILD_NUMBER}'
+        sh 'sudo docker push 647560355561.dkr.ecr.us-east-1.amazonaws.com/node-app:${BUILD_NUMBER}'
       }
     }
     stage('Deploy to app host') {
       steps {
-        sh 'sudo docker run -itd -p 8080:8080 --name HelloWorld public.ecr.aws/s8b3a9g8/node-app:${BUILD_NUMBER}'
+        sh 'sudo docker run -itd -p 8080:8080 --name HelloWorld 647560355561.dkr.ecr.us-east-1.amazonaws.com/node-app:${BUILD_NUMBER}'
       }
     }
   }
