@@ -12,11 +12,8 @@ pipeline {
     stage('Build Docker Image') {
       steps {
         sh 'cd test-nodeapp-1-task && sudo docker build . -t 647560355561.dkr.ecr.us-east-1.amazonaws.com/node-app:${BUILD_NUMBER}'
-        withCredentials([aws(accessKeyVariable:"AWS_ACCESS_KEY_ID", credentialsId: "AuthID", secretKeyVariable: "AWS_SECRET_ACCESS_KEY")]) {
-          sh 'sudo docker push 647560355561.dkr.ecr.us-east-1.amazonaws.com/node-app:${BUILD_NUMBER}'
-        }
+        sh 'sudo docker push 647560355561.dkr.ecr.us-east-1.amazonaws.com/node-app:${BUILD_NUMBER}'
       }
-        
     }
     stage('Deploy to app host') {
       steps {
