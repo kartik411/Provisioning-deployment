@@ -20,7 +20,6 @@ pipeline {
    
     stage('Deploy to app host') {
       steps {
-        sh 'sudo docker kill HelloWorld && sudo rm HelloWorld'
         sh 'sudo docker run -itd -p 8080:8080 --name HelloWorld public.ecr.aws/s8b3a9g8/node-app:helloworld'
       }
     }
