@@ -11,12 +11,12 @@ pipeline {
     }
     stage('Build Docker Image') {
       steps {
-        sh 'cd test-nodeapp-1-task && sudo docker build -t node-app .'
-        sh 'aws ecr get-login-password --region us-east-1' 
-        sh 'docker login -u AWS -p $(aws ecr get-login-password --region us-east-1) https://647560355561.dkr.ecr.us-east-1.amazonaws.com'
-        sh 'sudo docker tag node-app:latest 647560355561.dkr.ecr.us-east-1.amazonaws.com/node-app:latest'
-        withDockerRegistry(credentialsId: 'ecr:us-east-1:AWSauthToken', url: 'https://647560355561.dkr.ecr.us-east-1.amazonaws.com/node-app') {
-          sh 'sudo docker push 647560355561.dkr.ecr.us-east-1.amazonaws.com/node-app:latest'
+        script {
+          docker.withRegistry(
+            'https://647560355561.dkr.ecr.us-east-1.amazonaws.com/node-app',
+            'ecr:us-east-1:AWSauthToken')
+             def myImage = docker.build('node-app')
+             myImage.push('latest')
         }
       }  
     }
