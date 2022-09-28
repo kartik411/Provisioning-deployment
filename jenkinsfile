@@ -13,7 +13,7 @@ pipeline {
       steps {
         sh 'cd test-nodeapp-1-task && sudo docker build -t node-app .'
         sh 'aws ecr get-login-password --region us-east-1' 
-        sh 'docker login -u AWS -p password -e none https://647560355561.dkr.ecr.us-east-1.amazonaws.com'
+        sh 'cat ~/.docker/config.json | docker login --username AWS --password-stdin https://647560355561.dkr.ecr.us-east-1.amazonaws.com'
         sh 'sudo docker tag node-app:latest 647560355561.dkr.ecr.us-east-1.amazonaws.com/node-app:latest'
         sh 'sudo docker push 647560355561.dkr.ecr.us-east-1.amazonaws.com/node-app:latest'
       }  
